@@ -64,7 +64,7 @@ class TaxiTemplateBeamEndToEndTest(test_utils.BaseEndToEndTest):
         '--engine',
         'beam',
         '--pipeline_path',
-        'beam_dag_runner.py',
+        'local_dag_runner.py',
     ])
     self.assertEqual(0, result.exit_code)
     self.assertIn(
@@ -92,7 +92,7 @@ class TaxiTemplateBeamEndToEndTest(test_utils.BaseEndToEndTest):
         '--engine',
         'beam',
         '--pipeline_path',
-        'beam_dag_runner.py',
+        'local_dag_runner.py',
     ])
     self.assertEqual(0, result.exit_code)
     self.assertIn(
