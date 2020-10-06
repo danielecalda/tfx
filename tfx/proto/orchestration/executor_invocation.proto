@@ -26,6 +26,7 @@ message ArtifactList {
 
 // All the information needed for a TFX component execution.
 message ExecutorInvocation {
+  // DO NOT SUBMIT: clean this up.
   // TODO(jxzheng): clean up inputs and outputs field.
   // These fields are deprecated, new code should be using |input_dict| and
   // |output_dict|.
