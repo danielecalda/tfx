@@ -175,6 +175,7 @@ class BeamDagRunnerTest(test_utils.TfxTest):
                     'class_path: "tfx.components.trainer_executor"',
                     _PythonClassExecutableSpec()),
             'my_importer': None,
+            'my_resolver': None,
         })
     self.assertEqual(
         _component_drivers, {
@@ -185,12 +186,14 @@ class BeamDagRunnerTest(test_utils.TfxTest):
             'my_transform': None,
             'my_trainer': None,
             'my_importer': None,
+            'my_resolver': None,
         })
     # 'my_importer' has no upstream and can be executed in any order.
     self.assertIn('my_importer', _executed_components)
     _executed_components.remove('my_importer')
-    self.assertEqual(_executed_components,
-                     ['my_example_gen', 'my_transform', 'my_trainer'])
+    self.assertEqual(
+        _executed_components,
+        ['my_example_gen', 'my_transform', 'my_trainer', 'my_resolver'])
     # Verifies that every component gets a not-None pipeline_run.
     self.assertTrue(all(_conponent_to_pipeline_run.values()))
 
@@ -216,6 +219,7 @@ class BeamDagRunnerTest(test_utils.TfxTest):
                     'class_path: "tfx.components.trainer_executor"',
                     _PythonClassExecutableSpec()),
             'my_importer': None,
+            'my_resolver': None,
         })
     self.assertEqual(
         _component_drivers, {
@@ -226,13 +230,16 @@ class BeamDagRunnerTest(test_utils.TfxTest):
             'my_transform': None,
             'my_trainer': None,
             'my_importer': None,
+            'my_resolver': None,
         })
     # 'my_importer' has no upstream and can be executed in any order.
     self.assertIn('my_importer', _executed_components)
     _executed_components.remove('my_importer')
-    self.assertEqual(_executed_components,
-                     ['my_example_gen', 'my_transform', 'my_trainer'])
+    self.assertEqual(
+        _executed_components,
+        ['my_example_gen', 'my_transform', 'my_trainer', 'my_resolver'])
     # Verifies that every component gets a not-None pipeline_run.
+    print("I'm here _conponent_to_pipeline_run: ", _conponent_to_pipeline_run)
     self.assertTrue(all(_conponent_to_pipeline_run.values()))
 
 if __name__ == '__main__':

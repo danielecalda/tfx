@@ -30,6 +30,7 @@ from tfx.orchestration.portable import inputs_utils
 from tfx.orchestration.portable import outputs_utils
 from tfx.orchestration.portable import python_driver_operator
 from tfx.orchestration.portable import python_executor_operator
+from tfx.orchestration.portable import resolver_node_handler
 from tfx.orchestration.portable.mlmd import context_lib
 from tfx.proto.orchestration import driver_output_pb2
 from tfx.proto.orchestration import executable_spec_pb2
@@ -38,6 +39,7 @@ from tfx.proto.orchestration import pipeline_pb2
 
 from google.protobuf import message
 from ml_metadata.proto import metadata_store_pb2
+
 
 # Subclasses of BaseExecutorOperator
 ExecutorOperator = TypeVar(
@@ -60,6 +62,8 @@ DEFAULT_DRIVER_OPERATORS = {
 _SYSTEM_NODE_HANDLERS = {
     'tfx.components.common_nodes.importer_node.ImporterNode':
         importer_node_handler.ImporterNodeHandler,
+    'tfx.components.common_nodes.resolver_node.ResolverNode':
+        resolver_node_handler.ResolverNodeHandler,
 }
 
 
@@ -156,6 +160,7 @@ class Launcher(object):
         self._pipeline_node.node_info.type.name)
     self._system_node_handler = None
     if system_node_handler_class:
+      print("I'm here system_node_handler_class: ", system_node_handler_class)
       self._system_node_handler = system_node_handler_class()
 
   def _prepare_execution(self) -> _PrepareExecutionResult:
@@ -317,6 +322,7 @@ class Launcher(object):
     """
     logging.debug('Running launcher for %s', self._pipeline_node)
     if self._system_node_handler:
+      print("I'm here........")
       # If this is a system node, runs it and directly return.
       return self._system_node_handler.run(
           self._mlmd_connection, self._pipeline_node, self._pipeline_info,
