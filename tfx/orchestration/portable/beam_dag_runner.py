@@ -15,7 +15,7 @@
 
 import datetime
 import os
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, Optional, Type
 
 from absl import logging
 import apache_beam as beam
@@ -90,9 +90,9 @@ class _PipelineNodeAsDoFn(beam.DoFn):
 class BeamDagRunner(tfx_runner.TfxRunner):
   """Tfx runner on Beam."""
 
-  def __init__(self):
-    """Initializes BeamDagRunner as a TFX orchestrator.
-    """
+  def __init__(self, do_fn_cls: Optional[Type[beam.DoFn]] = None):
+    """Initializes BeamDagRunner as a TFX orchestrator."""
+    self._do_fn_cls = do_fn_cls or _PipelineNodeAsDoFn
 
   def _build_executable_spec(
       self, component_id: str,
@@ -228,7 +228,7 @@ class BeamDagRunner(tfx_runner.TfxRunner):
           signal_map[component_id] = (
               root
               | 'Run[%s]' % component_id >> beam.ParDo(
-                  _PipelineNodeAsDoFn(
+                  self._do_fn_cls(
                       pipeline_node=pipeline_node,
                       mlmd_connection=mlmd_connection,
                       pipeline_info=pipeline.pipeline_info,
